@@ -57,8 +57,6 @@ if [ -d ".git" ]; then rm -rf .git; fi
 zip -r dist.zip *
 mv dist.zip /work/build-results/
 chmod 777 /work/build-results/dist.zip
-mv /work-private/documentation /work/build-results/
-chmod -R 777 /work/build-results/documentation/
 ls -lah
 cd /work-private/
 
@@ -76,15 +74,22 @@ fi
 #
 # PUBLISH COMPODOC
 #
-ndes deployToGitHubBranch \
-  as "$GITHUB_COMMIT_USER" \
-  withEmail "$GITHUB_COMMIT_EMAIL" \
-  withGitHubAuthUsername "$GITHUB_AUTH_USER" \
-  withGitHubAuthToken "$GITHUB_AUTH_TOKEN" \
-  toRepository "https://github.com/cloukit/${GWBT_REPO_NAME}.git" \
-  branch "gh-pages" \
-  fromSource /work/build-results/documentation/ \
-  intoSubdirectory component-doc/${GWBT_TAG}
+if [ -d "/work-private/documentation" ]
+then
+  mv /work-private/documentation /work/build-results/
+  chmod -R 777 /work/build-results/documentation/
+  ndes deployToGitHubBranch \
+    as "$GITHUB_COMMIT_USER" \
+    withEmail "$GITHUB_COMMIT_EMAIL" \
+    withGitHubAuthUsername "$GITHUB_AUTH_USER" \
+    withGitHubAuthToken "$GITHUB_AUTH_TOKEN" \
+    toRepository "https://github.com/cloukit/${GWBT_REPO_NAME}.git" \
+    branch "gh-pages" \
+    fromSource /work/build-results/documentation/ \
+    intoSubdirectory component-doc/${GWBT_TAG}
+else
+  echo "SKIPPING COMPODOC SINCE THERE IS NO documentation FOLDER"
+fi
 
 # =============================================================
 #
