@@ -16,7 +16,7 @@ cp -r /work/.gitignore /work-private/
 # PREREQUISITES
 #
 cd /work-private/library-deploy-chain/
-source ./jenkins-publish-github-release-asset-helper-1.0.0
+source ./jenkins-publish-github-release-asset-helper-1.0.0.sh
 
 #
 # INSTALL GLOBALS AND CONFIGURE PROXYS
