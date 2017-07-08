@@ -141,17 +141,20 @@ npm --registry https://registry.npmjs.org/ --access public publish
 
 
 # Refresh nopar mirror
-echo "REFRESHING NPM PROXY"
-curl -I "http://npm-proxy.home.codeclou.io/-/package/@cloukit/${GWBT_REPO_NAME}/refresh"
+echo ""
+echo ">> REFRESHING NPM PROXY"
+echo ""
 COUNTER=0
 while : ; do
-    sleep 5
     echo "."
+    curl -s -o /dev/null -w "%{http_code}" "http://npm-proxy.home.codeclou.io/-/package/@cloukit/${GWBT_REPO_NAME}/refresh"
+    sleep 5s
     LATEST_VERSION_IN_NPM_MIRROR=$(curl --silent  "http://npm-proxy.home.codeclou.io/@cloukit%2f${GWBT_REPO_NAME}" | jq -r .\"dist-tags\".latest)
     [[ "$GWBT_TAG" == "$LATEST_VERSION_IN_NPM_MIRROR" ]] || break
     let COUNTER=COUNTER+1
-    if [ $COUNTER -gt 20 ]
+    if [ $COUNTER -gt 30 ]
     then
+      echo "break infitie loop!"
       break
     fi
 done
