@@ -11,7 +11,7 @@ Common code to deploy cloukit modules to npm and github releases
 
 ### Usage
 
-Put this into each modules `Jenkinsfile` to trigger a dockerized build inside Jenkins.
+Put this into each pipeline Jenkins Job to trigger a dockerized build inside Jenkins.
 
 ```bash
 node {
