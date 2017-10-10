@@ -24,6 +24,9 @@ node {
 }
 ```
 
+ * Master Branch pushes will be deployed to Nexus as alpha versions e.g. 1.1.0-alpha.6
+ * Tag pushes will be deployed to npmjs as release versions e.g. 1.1.0
+
 -----
 
 &nbsp;
