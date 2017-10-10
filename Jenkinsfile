@@ -47,8 +47,8 @@ pipelineHelper.nodejsTemplate {
       dir('source') {
         dir('dist') {
           // Convert e.g. 1.0.0 to 1.0.0-alpha.3434 => deployed to nexus
-          PCKVERSION = sh(returnStdout: true, script: 'cat package.json | jq -r ".version"').trim()
-          sh 'npm version ${PCKVERSION}-alpha.${BUILD_NUMBER}'
+          packageVersion = sh(returnStdout: true, script: 'cat package.json | jq -r ".version"').trim()
+          sh "npm version ${packageVersion}-alpha.${BUILD_NUMBER}"
           pipelineHelper.npmPublishToNexusRepository('cloukit')
         }
       }
