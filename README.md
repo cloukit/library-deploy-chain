@@ -11,20 +11,18 @@ Common code to deploy cloukit modules to npm and github releases
 
 ### Usage
 
-Put this into each modules `jenkins.sh` to trigger a dockerized build inside Jenkins.
+Put this into each modules `Jenkinsfile` to trigger a dockerized build inside Jenkins.
 
 ```bash
-#!/bin/bash
-
-# BUILD TRIGGERED BY: https://github.com/codeclou/jenkins-github-webhook-build-trigger-plugin
-set -e
-git clone https://github.com/cloukit/library-deploy-chain.git library-deploy-chain
-cd library-deploy-chain
-bash jenkins.sh
+node {
+  if (env.GWBT_REPO_FULL_NAME) {
+      sh 'curl -H "Authorization: token ${GITHUB_AUTH_TOKEN}" -H "Accept: application/vnd.github.v3.raw" -o Jenkinsfile -L https://api.github.com/repos/cloukit/library-deploy-chain/contents/Jenkinsfile'
+      load('./Jenkinsfile')
+  } else {
+      echo "manual starts not allowed!"
+  }
+}
 ```
-
-This will trigger a build via the modules `yarn build` script,
-which triggers `library-build-chain`.
 
 -----
 
