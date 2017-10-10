@@ -17,7 +17,9 @@ pipelineHelper.nodejsTemplate {
   stage('git clone') {
     if(doBuild) {
       sh 'git clone --single-branch --branch $GWBT_BRANCH$GWBT_TAG https://${GITHUB_AUTH_TOKEN}@github.com/${GWBT_REPO_FULL_NAME}.git source'
-      sh 'git reset --hard $GWBT_COMMIT_AFTER'
+      dir ('source') {
+        sh 'git reset --hard $GWBT_COMMIT_AFTER'
+      }
     } else {
        echo 'Skipped'
     }
