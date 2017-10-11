@@ -42,6 +42,15 @@ pipelineHelper.nodejsTemplate {
        echo 'Skipped'
     }
   }
+  stage('build demo') {
+    if(doBuild) {
+      dir('source') {
+        sh 'yarn build:demo'
+      }
+    } else {
+       echo 'Skipped'
+    }
+  }
   stage('deploy to nexus') {
     if(doBuild) {
       dir('source') {
@@ -56,18 +65,30 @@ pipelineHelper.nodejsTemplate {
        echo 'Skipped'
     }
   }
-
-  stage('archive') {
-    if(doBuild) {
+  stage('deploy to npmjs') {
+    if(env.GWBT_TAG) {
       dir('source') {
         dir('dist') {
-          sh 'zip -r deploy.zip *'
-          archiveArtifacts 'deploy.zip'
+          sh 'echo "//registry.npmjs.org/:_password=${NPMJS_PASSWORD}" > ~/.npmrc'
+          sh 'echo "//registry.npmjs.org/:username=${NPMJS_USERNAME}" >> ~/.npmrc'
+          sh 'echo "//registry.npmjs.org/:email=${NPMJS_EMAIL}" >> ~/.npmrc'
+          sh 'echo "//registry.npmjs.org/:always-auth=false" >> ~/.npmrc'
+          sh 'npm --registry https://registry.npmjs.org/ --access public publish'
         }
       }
     } else {
-       echo 'Skipped'
+       echo 'Skipped - no tag!'
+    }
+  }
+  stage('deploy demo and compodoc') {
+    if(env.GWBT_TAG && env.GWBT_REPO_NAME != "library-build-chain") {
+      dir('source') {
+        sh 'npm install -g node-deploy-essentials'
+        sh 'npm run ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN}  https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource documentation intoSubdirectory ${GWBT_TAG}/documentation'
+        sh 'npm run ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN}  https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource dist-demo/dist intoSubdirectory ${GWBT_TAG}/demo'
+      }
+    } else {
+       echo 'Skipped - no tag!'
     }
   }
 }
-
