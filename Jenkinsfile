@@ -43,7 +43,7 @@ pipelineHelper.nodejsTemplate {
     }
   }
   stage('build demo') {
-    if(doBuild) {
+    if(doBuild && env.GWBT_REPO_NAME != "library-build-chain") {
       dir('source') {
         sh 'yarn build:demo'
       }
