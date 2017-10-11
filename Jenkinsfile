@@ -95,8 +95,8 @@ pipelineHelper.nodejsTemplate {
     if(env.GWBT_TAG && env.GWBT_REPO_NAME != "library-build-chain") {
       dir('source') {
         sh 'npm config set prefix /home/jenkins/.npmglobal && npm install -g node-deploy-essentials'
-        sh '/home/jenkins/.npmglobal/bin/ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN}  https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource documentation intoSubdirectory ${GWBT_TAG}/documentation'
-        sh '/home/jenkins/.npmglobal/bin/ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN}  https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource dist-demo/dist intoSubdirectory ${GWBT_TAG}/demo'
+        sh '/home/jenkins/.npmglobal/bin/ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN} toRepository https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource documentation intoSubdirectory ${GWBT_TAG}/documentation'
+        sh '/home/jenkins/.npmglobal/bin/ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN} toRepository https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource dist-demo/dist intoSubdirectory ${GWBT_TAG}/demo'
       }
     } else {
        echo 'Skipped - no tag!'
