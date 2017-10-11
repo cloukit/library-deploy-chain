@@ -73,6 +73,8 @@ pipelineHelper.nodejsTemplate {
           sh 'echo "//registry.npmjs.org/:username=${NPMJS_USERNAME}" >> ~/.npmrc'
           sh 'echo "//registry.npmjs.org/:email=${NPMJS_EMAIL}" >> ~/.npmrc'
           sh 'echo "//registry.npmjs.org/:always-auth=false" >> ~/.npmrc'
+          // reset package.json version back to release version
+          sh "npm version ${GWBT_TAG}"
           sh 'npm --registry https://registry.npmjs.org/ --access public publish'
         }
       }
