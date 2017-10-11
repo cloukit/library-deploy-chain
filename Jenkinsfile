@@ -33,6 +33,15 @@ pipelineHelper.nodejsTemplate {
        echo 'Skipped'
     }
   }
+  stage('test') {
+    if(doBuild) {
+      dir('source') {
+        sh 'yarn test'
+      }
+    } else {
+       echo 'Skipped'
+    }
+  }
   stage('build') {
     if(doBuild) {
       dir('source') {
