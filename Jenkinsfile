@@ -46,6 +46,7 @@ pipelineHelper.nodejsTemplate {
     if(doBuild) {
       dir('source') {
         sh 'yarn build'
+        stash name: "compodoc", includes: "documentation"
       }
     } else {
        echo 'Skipped'
@@ -93,13 +94,14 @@ pipelineHelper.nodejsTemplate {
   }
   stage('deploy demo and compodoc') {
     if(env.GWBT_TAG && env.GWBT_REPO_NAME != "library-build-chain") {
+      unstash "compodoc"
       sh 'git config --global user.name ${GITHUB_COMMIT_USER}'
       sh 'git config --global user.email ${GITHUB_COMMIT_EMAIL}'
       sh 'git config --global push.default simple'
       sh 'git clone --single-branch --branch gh-pages https://${GITHUB_AUTH_TOKEN}@github.com/cloukit/${GWBT_REPO_NAME}.git gh-pages'
       dir('gh-pages') {
         sh 'mkdir ${GWBT_TAG}'
-        sh 'cp -r ../source/documentation ${GWBT_TAG}/documentation'
+        sh 'cp -r ../documentation ${GWBT_TAG}/documentation'
         sh 'cp -r ../source/dist-demo/dist ${GWBT_TAG}/demo'
         sh 'git add . -A'
         sh 'git commit -m "deploy via ci"'
