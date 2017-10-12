@@ -42,19 +42,19 @@ pipelineHelper.nodejsTemplate {
        echo 'Skipped'
     }
   }
-  stage('build demo') {
-    if(doBuild && env.GWBT_REPO_NAME != "library-build-chain") {
+  stage('build') {
+    if(doBuild) {
       dir('source') {
-        sh 'yarn build:demo'
+        sh 'yarn build'
       }
     } else {
        echo 'Skipped'
     }
   }
-  stage('build') {
-    if(doBuild) {
+  stage('build demo') {
+    if(doBuild && env.GWBT_REPO_NAME != "library-build-chain") {
       dir('source') {
-        sh 'yarn build'
+        sh 'yarn build:demo'
       }
     } else {
        echo 'Skipped'
