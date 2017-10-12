@@ -93,10 +93,17 @@ pipelineHelper.nodejsTemplate {
   }
   stage('deploy demo and compodoc') {
     if(env.GWBT_TAG && env.GWBT_REPO_NAME != "library-build-chain") {
-      dir('source') {
-        sh 'npm config set prefix /home/jenkins/.npmglobal && npm install -g node-deploy-essentials'
-        sh '/home/jenkins/.npmglobal/bin/ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN} toRepository https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource documentation intoSubdirectory ${GWBT_TAG}/documentation'
-        sh '/home/jenkins/.npmglobal/bin/ndes deployToGitHubPages as "${GITHUB_COMMIT_USER}" withEmail "${GITHUB_COMMIT_EMAIL}" withGitHubAuthUsername ${GITHUB_COMMIT_USER} withGitHubAuthToken ${GITHUB_AUTH_TOKEN} toRepository https://github.com/cloukit/${GWBT_REPO_NAME}.git fromSource dist-demo/dist intoSubdirectory ${GWBT_TAG}/demo'
+      sh 'git config --global user.name ${GITHUB_COMMIT_USER}'
+      sh 'git config --global user.email ${GITHUB_COMMIT_EMAIL}'
+      sh 'git config --global push.default simple'
+      sh 'git clone --single-branch --branch gh-pages https://${GITHUB_AUTH_TOKEN}@github.com/cloukit/${GWBT_REPO_NAME}.git gh-pages'
+      dir('gh-pages') {
+        sh 'mkdir ${GWBT_TAG}'
+        sh 'cp -r ../source/documentation ${GWBT_TAG}/documentation'
+        sh 'cp -r ../source/dist-demo/dist ${GWBT_TAG}/demo'
+        sh 'git add . -A'
+        sh 'git commit -m "deploy via ci"'
+        sh 'git push'
       }
     } else {
        echo 'Skipped - no tag!'
