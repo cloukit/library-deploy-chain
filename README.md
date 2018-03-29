@@ -15,13 +15,16 @@ Put this into each pipeline Jenkins Job to trigger a dockerized build inside Jen
 
 ```bash
 node {
-  if (env.GWBT_REPO_FULL_NAME) {
-      sh 'curl -H "Authorization: token ${GITHUB_AUTH_TOKEN}" -H "Accept: application/vnd.github.v3.raw" -o Jenkinsfile -L https://api.github.com/repos/cloukit/library-deploy-chain/contents/Jenkinsfile'
-      load('./Jenkinsfile')
+  if (env.GWBT_BRANCH == 'gh-pages') {
+    echo "NOT BUILDING GH-PAGES BRANCH"
+  } else if (env.GWBT_REPO_FULL_NAME) {
+    sh 'curl -H "Authorization: token ${GITHUB_AUTH_TOKEN}" -H "Accept: application/vnd.github.v3.raw" -o Jenkinsfile -L https://api.github.com/repos/cloukit/library-deploy-chain/contents/Jenkinsfile'
+    load('./Jenkinsfile')
   } else {
-      echo "manual starts not allowed!"
+    echo "manual starts not allowed!"
   }
 }
+
 ```
 
  * Master Branch pushes will be deployed to Nexus as alpha versions e.g. 1.1.0-alpha.6
