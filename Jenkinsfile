@@ -166,6 +166,9 @@ pipelineHelper.nodejsTemplate {
       sh 'git config --global user.name ${GITHUB_COMMIT_USER}'
       sh 'git config --global user.email ${GITHUB_COMMIT_EMAIL}'
       sh 'git config --global push.default simple'
+      if(fileExists("gh-pages")) {
+        sh 'rm -rf ./gh-pages'
+      }
       sh 'git clone --single-branch --branch gh-pages https://${GITHUB_AUTH_TOKEN}@github.com/cloukit/${GWBT_REPO_NAME}.git gh-pages'
       dir('gh-pages') {
         sh 'mkdir ${GWBT_TAG}'
