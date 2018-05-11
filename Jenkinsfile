@@ -85,7 +85,7 @@ pipelineHelper.nodejsTemplate {
     if(doBuild) {
       dir('source') {
         sh 'yarn pre'
-        sh 'yarn build ' + env.GWBT_REPO_NAME + '-demo --base-href /' + env.GWBT_REPO_NAME + '/1.7.0/demo/ --prod'
+        sh 'yarn build ' + env.GWBT_REPO_NAME + '-demo --base-href /' + env.GWBT_REPO_NAME + '/' + packageVersion + '/demo/ --prod'
         dir('dist') {
           sh 'zip -r demo.zip ' + env.GWBT_REPO_NAME + '-demo'
           archiveArtifacts artifacts: 'demo.zip', fingerprint: true
