@@ -23,6 +23,8 @@ pipelineHelper.nodejsTemplate {
       sh 'git clone --single-branch --branch $GWBT_BRANCH$GWBT_TAG https://${GITHUB_AUTH_TOKEN}@github.com/${GWBT_REPO_FULL_NAME}.git source'
       dir ('source') {
         sh 'git reset --hard $GWBT_COMMIT_AFTER'
+        // Remove .git so that we do not get "npm ERR! Git working directory not clean." when publishing
+        sh 'rm -rf .git'
       }
     } else {
        echo 'Skipped'
@@ -131,9 +133,6 @@ pipelineHelper.nodejsTemplate {
         dir('dist/cloukit/' + env.GWBT_REPO_NAME) {
           // Convert e.g. 1.0.0 to 1.0.0-alpha.3434 => deployed to nexus
           sh "npm version ${packageVersion}-alpha.${BUILD_NUMBER}"
-        }
-        sh 'git add . -A && git commit -m "dummy commit to avoid: NPM Error Git working directory not clean - even though we do not push"'
-        dir('dist/cloukit/' + env.GWBT_REPO_NAME) {
           pipelineHelper.npmPublishToNexusRepository('cloukit')
         }
       }
@@ -151,9 +150,6 @@ pipelineHelper.nodejsTemplate {
           sh 'echo "//registry.npmjs.org/:always-auth=false" >> ~/.npmrc'
           // reset package.json version back to release version
           sh "npm version ${GWBT_TAG}"
-        }
-        sh 'git add . -A && git commit -m "dummy commit to avoid: NPM Error Git working directory not clean - even though we do not push"'
-        dir('dist/cloukit/' + env.GWBT_REPO_NAME) {
           sh 'npm --registry https://registry.npmjs.org/ --access public publish'
         }
       }
