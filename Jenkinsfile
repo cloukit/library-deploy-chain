@@ -50,7 +50,7 @@ pipelineHelper.nodejsTemplate {
   stage('test') {
     if(doBuild) {
       dir('source') {
-        sh 'yarn test'
+        sh 'yarn test --watch=false'
       }
     } else {
        echo 'Skipped'
