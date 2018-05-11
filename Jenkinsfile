@@ -133,6 +133,10 @@ pipelineHelper.nodejsTemplate {
         dir('dist/cloukit/' + env.GWBT_REPO_NAME) {
           // Convert e.g. 1.0.0 to 1.0.0-alpha.3434 => deployed to nexus
           sh "npm version ${packageVersion}-alpha.${BUILD_NUMBER}"
+          echo "================"
+          sh 'pwd'
+          sh 'ls -lah'
+          echo "================"
           pipelineHelper.npmPublishToNexusRepository('cloukit')
         }
       }
@@ -150,6 +154,10 @@ pipelineHelper.nodejsTemplate {
           sh 'echo "//registry.npmjs.org/:always-auth=false" >> ~/.npmrc'
           // reset package.json version back to release version
           sh "npm version ${GWBT_TAG}"
+          echo "================"
+          sh 'pwd'
+          sh 'ls -lah'
+          echo "================"
           sh 'npm --registry https://registry.npmjs.org/ --access public publish'
         }
       }
