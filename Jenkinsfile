@@ -74,7 +74,7 @@ pipelineHelper.nodejsTemplate {
       dir('source') {
         sh 'yarn build @cloukit/' + env.GWBT_REPO_NAME + ' --prod'
         echo "==================="
-        sh 'ls -lah dist/cloukit/' + env.GWBT_REPO_NAME
+        sh 'ls -lah dist/\\@cloukit/' + env.GWBT_REPO_NAME
         echo "==================="
       }
     } else {
@@ -133,7 +133,7 @@ pipelineHelper.nodejsTemplate {
   stage('deploy to nexus') {
     if(doBuild) {
       dir('source') {
-        dir('dist/cloukit/' + env.GWBT_REPO_NAME) {
+        dir('dist/\\@cloukit/' + env.GWBT_REPO_NAME) {
           // Convert e.g. 1.0.0 to 1.0.0-alpha.3434 => deployed to nexus
           sh "npm version ${packageVersion}-alpha.${BUILD_NUMBER}"
           echo "================"
@@ -150,7 +150,7 @@ pipelineHelper.nodejsTemplate {
   stage('deploy to npmjs') {
     if(env.GWBT_TAG) {
       dir('source') {
-        dir('dist/cloukit/' + env.GWBT_REPO_NAME) {
+        dir('dist/\\@cloukit/' + env.GWBT_REPO_NAME) {
           sh 'echo "//registry.npmjs.org/:_password=${NPMJS_PASSWORD}" > ~/.npmrc'
           sh 'echo "//registry.npmjs.org/:username=${NPMJS_USERNAME}" >> ~/.npmrc'
           sh 'echo "//registry.npmjs.org/:email=${NPMJS_EMAIL}" >> ~/.npmrc'
