@@ -181,6 +181,7 @@ pipelineHelper.nodejsTemplate {
         sh 'mkdir ${GWBT_TAG}'
         sh 'cp -r ../source/documentation ${GWBT_TAG}/documentation'
         sh 'cp -r ../source/dist/' + env.GWBT_REPO_NAME + '-demo ${GWBT_TAG}/demo'
+        sh 'rm -f ${GWBT_TAG}/demo/assets/.gitignore'
         sh 'git add . -A'
         sh 'git commit -m "deploy via ci"'
         sh 'git push'
