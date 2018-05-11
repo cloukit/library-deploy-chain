@@ -73,6 +73,9 @@ pipelineHelper.nodejsTemplate {
     if(doBuild) {
       dir('source') {
         sh 'yarn build @cloukit/' + env.GWBT_REPO_NAME + ' --prod'
+        echo "==================="
+        sh 'ls -lah dist/cloukit/' + env.GWBT_REPO_NAME
+        echo "==================="
       }
     } else {
        echo 'Skipped'
