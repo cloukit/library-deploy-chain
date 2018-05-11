@@ -101,17 +101,17 @@ pipelineHelper.nodejsTemplate {
         // CDN URL WHERE WE HAVE DEPLOYED FONTS,JS,CSS CENTRALLY
         cdnUrl = 'https://cloukit.github.io/compodoc-theme/theme/1.0.0-beta.10'
         // PATCH JS CDN URLS
-        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/compodoc/src/templates/page.hbs'
-        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/compodoc/src/templates/partials/component.hbs'
-        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/compodoc/src/templates/partials/module.hbs'
-        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/compodoc/src/templates/partials/routes.hbs'
-        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/compodoc/src/templates/partials/overview.hbs'
+        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/\\@compodoc/compodoc/src/templates/page.hbs'
+        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/\\@compodoc/compodoc/src/templates/partials/component.hbs'
+        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/\\@compodoc/compodoc/src/templates/partials/module.hbs'
+        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/\\@compodoc/compodoc/src/templates/partials/routes.hbs'
+        sh 'sed -i -e \'s@src="[^"]*js/@src="' + cdnUrl + '/dist/js/@g\' ./node_modules/\\@compodoc/compodoc/src/templates/partials/overview.hbs'
         // PATCH OTHER CDN URLS
-        sh 'sed -i -e \'s@href="[^"]*styles/style.css@href="' + cdnUrl + '/style.css@g\' ./node_modules/compodoc/src/templates/page.hbs'
-        sh 'sed -i -e \'s@href="[^"]*images/favicon.ico@href="' + cdnUrl + '/images/favicon.ico@g\' ./node_modules/compodoc/src/templates/page.hbs'
-        sh 'sed -i -e \'s@src="[^"]*images/compodoc-vectorise.svg@src="' + cdnUrl + '/images/compodoc-logo.svg@g\' ./node_modules/compodoc/src/templates/partials/menu.hbs'
+        sh 'sed -i -e \'s@href="[^"]*styles/style.css@href="' + cdnUrl + '/style.css@g\' ./node_modules/\\@compodoc/compodoc/src/templates/page.hbs'
+        sh 'sed -i -e \'s@href="[^"]*images/favicon.ico@href="' + cdnUrl + '/images/favicon.ico@g\' ./node_modules/\\@compodoc/compodoc/src/templates/page.hbs'
+        sh 'sed -i -e \'s@src="[^"]*images/compodoc-vectorise.svg@src="' + cdnUrl + '/images/compodoc-logo.svg@g\' ./node_modules/\\@compodoc/compodoc/src/templates/partials/menu.hbs'
         // Build CompoDoc
-        sh './node_modules/compodoc/bin/index-cli.js --tsconfig tsconfig.json --disableCoverage --disablePrivateOrInternalSupport --name "' + env.GWBT_REPO_NAME + ' v' + packageVersion + '" src'
+        sh './node_modules/\\@compodoc/compodoc/bin/index-cli.js --tsconfig tsconfig.json --disableCoverage --disablePrivateOrInternalSupport --name "' + env.GWBT_REPO_NAME + ' v' + packageVersion + '" src'
         // Cleanup - we do not want to deploy these files with every release!
         if(fileExists("./documentation/fonts/")) { sh 'rm -rf ./documentation/fonts/' }
         if(fileExists("./documentation/images/")) { sh 'rm -rf ./documentation/images/' }
