@@ -97,7 +97,7 @@ pipelineHelper.nodejsTemplate {
         echo('>> CREATING COMPODOC');
         echo('>> ==============');
         // INSTALL SPECIFIC VERSION
-        sh 'yarn add @compodoc/compodoc@1.1.2 --dev'
+        sh 'yarn add @compodoc/compodoc@1.0.0 --dev'
         // CDN URL WHERE WE HAVE DEPLOYED FONTS,JS,CSS CENTRALLY
         cdnUrl = 'https://cloukit.github.io/compodoc-theme/theme/1.0.0-beta.10'
         // PATCH JS CDN URLS
