@@ -47,10 +47,19 @@ pipelineHelper.nodejsTemplate {
        echo 'Skipped'
     }
   }
-  stage('test') {
+  stage('test library') {
     if(doBuild) {
       dir('source') {
-        sh 'yarn test --watch=false'
+        sh 'yarn test @cloukit/' + env.GWBT_REPO_NAME + ' --watch=false'
+      }
+    } else {
+       echo 'Skipped'
+    }
+  }
+  stage('test demo') {
+    if(doBuild) {
+      dir('source') {
+        sh 'yarn test ' + env.GWBT_REPO_NAME + '-demo --watch=false'
       }
     } else {
        echo 'Skipped'
