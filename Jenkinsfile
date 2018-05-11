@@ -50,6 +50,7 @@ pipelineHelper.nodejsTemplate {
   stage('test library') {
     if(doBuild) {
       dir('source') {
+        sh 'yarn pre'
         sh 'yarn test @cloukit/' + env.GWBT_REPO_NAME + ' --watch=false'
       }
     } else {
@@ -59,6 +60,7 @@ pipelineHelper.nodejsTemplate {
   stage('test demo') {
     if(doBuild) {
       dir('source') {
+        sh 'yarn pre'
         sh 'yarn test ' + env.GWBT_REPO_NAME + '-demo --watch=false'
       }
     } else {
@@ -69,6 +71,20 @@ pipelineHelper.nodejsTemplate {
     if(doBuild) {
       dir('source') {
         sh 'yarn build @cloukit/' + env.GWBT_REPO_NAME + ' --prod'
+      }
+    } else {
+       echo 'Skipped'
+    }
+  }
+  stage('build demo') {
+    if(doBuild) {
+      dir('source') {
+        sh 'yarn pre'
+        sh 'yarn build ' + env.GWBT_REPO_NAME + '-demo --base-href /' + env.GWBT_REPO_NAME + '/1.7.0/demo/ --prod'
+        dir('dist') {
+          sh 'zip -r demo.zip ' + env.GWBT_REPO_NAME + '-demo'
+          archiveArtifacts artifacts: 'demo.zip', fingerprint: true
+        }
       }
     } else {
        echo 'Skipped'
@@ -104,20 +120,6 @@ pipelineHelper.nodejsTemplate {
         // ARCHIVE
         sh 'zip -r compodoc.zip documentation'
         archiveArtifacts artifacts: 'compodoc.zip', fingerprint: true
-      }
-    } else {
-       echo 'Skipped'
-    }
-  }
-  stage('build demo') {
-    if(doBuild) {
-      dir('source') {
-        sh 'yarn pre'
-        sh 'yarn build ' + env.GWBT_REPO_NAME + '-demo --base-href /' + env.GWBT_REPO_NAME + '/1.7.0/demo/ --prod'
-        dir('dist') {
-          sh 'zip -r demo.zip ' + env.GWBT_REPO_NAME + '-demo'
-          archiveArtifacts artifacts: 'demo.zip', fingerprint: true
-        }
       }
     } else {
        echo 'Skipped'
