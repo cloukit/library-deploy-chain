@@ -72,7 +72,7 @@ pipelineHelper.nodejsTemplate {
   stage('build library') {
     if(doBuild) {
       dir('source') {
-        sh 'yarn build @cloukit/' + env.GWBT_REPO_NAME + ' --prod'
+        sh 'yarn build @cloukit/' + env.GWBT_REPO_NAME
         echo "==================="
         sh 'ls -lah dist/\\@cloukit/' + env.GWBT_REPO_NAME
         echo "==================="
