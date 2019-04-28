@@ -15,13 +15,16 @@ Put this into each pipeline Jenkins Job to trigger a dockerized build inside Jen
 
 ```bash
 node {
-  if (env.GWBT_BRANCH == 'gh-pages') {
-    echo "NOT BUILDING GH-PAGES BRANCH"
-  } else if (env.GWBT_REPO_FULL_NAME) {
-    sh 'curl -H "Authorization: token ${GITHUB_AUTH_TOKEN}" -H "Accept: application/vnd.github.v3.raw" -o Jenkinsfile -L https://api.github.com/repos/cloukit/library-deploy-chain/contents/Jenkinsfile'
-    load('./Jenkinsfile')
-  } else {
-    echo "manual starts not allowed!"
+  wrap([$class: 'HideSecretEnvVarsBuildWrapper']) {
+      if (env.GWBT_BRANCH == 'gh-pages') {
+        echo "NOT BUILDING GH-PAGES BRANCH"
+      } else if (env.GWBT_REPO_FULL_NAME) {
+        // ALWAYS LOAD JENKINSFILE FROM MASTER !!! TO AVOID INJECTS BY PULL REQUESTS !!!
+        sh 'curl -H "Authorization: token ${SECRET_GITHUB_AUTH_TOKEN}" -H "Accept: application/vnd.github.v3.raw" -o Jenkinsfile -L https://api.github.com/repos/cloukit/library-deploy-chain/contents/Jenkinsfile'
+        load('./Jenkinsfile')
+      } else {
+        echo "manual starts not allowed!"
+      }
   }
 }
 
